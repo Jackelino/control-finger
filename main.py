@@ -1,7 +1,34 @@
+import sys
+import os
+import pygame as pg
+from setup.Setup import Setup
+from player.Player import Player
 
-from Player import Player as P
+running = True
 
-player = P('Jack')
+player = Player('Jack')
+setup = Setup()
 
-print(player.name)
-print(player.score)
+pg.init()
+pg.mixer.init()
+screen = pg.display.set_mode((setup.screenWidth, setup.screenHeight))
+pg.display.set_caption(setup.tittle)
+font = pg.font.Font("./resources/fonts/" + setup.font, setup.sizeFont)
+textScore = font.render("score", True, setup.colors['WHITE'])
+
+clock = pg.time.Clock()
+
+# Game Loop
+while running:
+    # Keep loop running at the right speed
+    clock.tick(60)
+    # Process input (events)
+    for event in pg.event.get():
+        # check for closing window
+        if event.type == pg.QUIT:
+            running = False
+    # Draw / Render
+    screen.fill(setup.colors['BLACK'])
+    screen.blit(textScore, (10, 10))
+    pg.display.flip()
+pg.quit()

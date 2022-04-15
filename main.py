@@ -13,7 +13,7 @@ pg.init()
 pg.mixer.init()
 screen = pg.display.set_mode((setup.screenWidth, setup.screenHeight))
 pg.display.set_caption(setup.tittle)
-font = pg.font.Font("./resources/fonts/" + setup.font, setup.sizeFont)
+font = pg.font.Font(setup.font['Fixedsys500'], setup.sizeFont)
 textScore = font.render("score", True, setup.colors['WHITE'])
 
 clock = pg.time.Clock()

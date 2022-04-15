@@ -12,12 +12,19 @@ class Setup:
             'BLACK': (0, 0, 0)
         }
         # FONTS
-        self._font = 'Fixedsys500c.ttf'
+        self._font = {
+            'Fixedsys500': './resources/fonts/Fixedsys500c.ttf'
+        }
         self._sizeFont = 20
         # MUSIC
+        self._musics = {
+
+        }
 
         # SOUND
+        self._sounds = {
 
+        }
     # GETTERS
 
     @property
@@ -43,6 +50,14 @@ class Setup:
     @property
     def colors(self):
         return self._colors
+
+    @property
+    def musics(self):
+        return self._musics
+
+    @property
+    def sounds(self):
+        return self._sounds
 
     # SETTERS
     @screenHeight.setter

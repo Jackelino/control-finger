@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4b50f15c-bbb7-4528-b32e-bb989bd056c1" name="Changes" comment="se crea la clase Payer">
-      <change afterPath="$PROJECT_DIR$/resources/fonts/Fixedsys500c.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/setup/Setup.py" afterDir="false" />
+    <list default="true" id="4b50f15c-bbb7-4528-b32e-bb989bd056c1" name="Changes" comment="se crea los resourse y la clase Setup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Player.py" beforeDir="false" afterPath="$PROJECT_DIR$/player/Player.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup/Setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup/Setup.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,14 +30,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "settings.editor.selected.configurable": "copyright"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\jacki\Desktop\proyectos\control-finger\resources\fonts" />
@@ -156,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1649964099551</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="se crea los resourse y la clase Setup">
+      <created>1649986124656</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1649986124657</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -172,7 +177,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="se crea la clase Payer" />
-    <option name="LAST_COMMIT_MESSAGE" value="se crea la clase Payer" />
+    <MESSAGE value="se crea los resourse y la clase Setup" />
+    <option name="LAST_COMMIT_MESSAGE" value="se crea los resourse y la clase Setup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

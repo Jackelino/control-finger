@@ -6,7 +6,7 @@ from player.Player import Player
 
 running = True
 
-player = Player('Jack')
+player = Player('Jacks')
 setup = Setup()
 
 pg.init()

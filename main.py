@@ -15,6 +15,7 @@ screen = pg.display.set_mode((setup.screenWidth, setup.screenHeight))
 pg.display.set_caption(setup.tittle)
 font = pg.font.Font(setup.font['Fixedsys500'], setup.sizeFont)
 textScore = font.render("score", True, setup.colors['WHITE'])
+textPlayer = font.render("player", True, setup.colors['WHITE'])
 
 clock = pg.time.Clock()
 
@@ -30,5 +31,6 @@ while running:
     # Draw / Render
     screen.fill(setup.colors['BLACK'])
     screen.blit(textScore, (10, 10))
+    screen.blit(textPlayer, (600, 10))
     pg.display.flip()
 pg.quit()

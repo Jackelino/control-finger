@@ -1,5 +1,3 @@
-import sys
-import os
 import pygame as pg
 from setup.Setup import Setup
 from player.Player import Player

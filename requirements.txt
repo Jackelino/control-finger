@@ -1,5 +1,7 @@
+#para instalar los requerimientos ejecuta el siguiente comando: pip install -r requirements.txt
 pip==22.0.4
 pygame==2.1.2
 setuptools==60.2.0
 wheel==0.37.1
-#para instalar los requerimientos ejecuta el siguiente comando: pip install -r requirements.txt
+mediapipe~=0.8.9.1
+numpy~=1.22.3

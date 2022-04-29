@@ -25,6 +25,16 @@ class Setup:
         self._sounds = {
 
         }
+        # image
+        self._images = {
+
+        }
+        # SPRITE_SHEET
+        self._spriteSheet = {
+
+        }
+        # FPS
+        self._fps = 60
     # GETTERS
 
     @property
@@ -58,6 +68,18 @@ class Setup:
     @property
     def sounds(self):
         return self._sounds
+
+    @property
+    def images(self):
+        return self._images
+
+    @property
+    def spriteSheet(self):
+        return self._spriteSheet
+
+    @property
+    def fps(self):
+        return self._fps
 
     # SETTERS
     @screenHeight.setter

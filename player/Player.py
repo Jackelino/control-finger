@@ -1,4 +1,5 @@
 import pygame as pg
+from setup import Setup
 
 
 class Player(pg.sprite.Sprite):
@@ -6,3 +7,20 @@ class Player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.name = name
         self.score = score
+
+
+
+    def walking(self):
+        pass
+
+    def jumping(self):
+        pass
+
+    def repose(self):
+        pass
+
+    def handleState(self):
+        pass
+
+    def update(self):
+        pass

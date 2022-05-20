@@ -14,48 +14,62 @@ if not os.path.exists(directory):
     print("carpeta creada", directory)
     os.makedirs(directory)
 
-mp_drawing = mp.solutions.drawing_utils
-mp_hands = mp.solutions.hands
-cap = cv2.VideoCapture(0)
-with mp_hands.Hands(
-        static_image_mode=False,
-        max_num_hands=1,
-        min_detection_confidence=0.5) as hands:
-    while True:
-        ret, frame = cap.read()
-        copia = frame.copy()
-        if ret == False:
-            break
-        height, width, _ = frame.shape
-        # frame = cv2.flip(frame, 1)
-        frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        results = hands.process(frame_rgb)
-        if results.multi_hand_landmarks is not None:
-            for hand_landmarks in results.multi_hand_landmarks:
-                for (id, lm) in enumerate(hand_landmarks.landmark):
-                    cordx, cordy = int(lm.x * width), int(
-                        lm.y * height)  # obtenemos los puntos de posiscion de cada dedo
-                    positions.append([id, cordx, cordy])
-                    mp_drawing.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-                if len(positions) != 0:
-                    pto_1 = positions[4]
-                    pto_2 = positions[20]
-                    pto_3 = positions[12]
-                    pto_4 = positions[0]
-                    pto_5 = positions[9]  # púnto central
-                    x1, y1 = (pto_5[1] - 100), (pto_5[2] - 100)
-                    # recortamos la imagen aparttir del punto central para que se observe solo la mano
-                    width, height = (x1 + 100), (y1 + 100)
-                    # dibujamos un rectango para delimitar la mano
-                    x2, y2 = x1 + width, y1 + height
-                    dedosReg = copia[y1:y2, x1:x2]
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
-                dedosReg = cv2.resize(dedosReg, (255, 200), interpolation=cv2.INTER_CUBIC)
-                cv2.imwrite(directory + "/signal_{}.jpg".format(cont), dedosReg)
-                cont += 1
+#Asignamos un contador para el nombre de la fotos
+cont = 0
 
-        cv2.imshow('Frame', frame)
-        if cv2.waitKey(1) & 0xFF == 27 or cont == numberCapture:
-            break
+#Leemos la camara
+cap = cv2.VideoCapture(0)
+
+#----------------------------Creamos un obejto que va almacenar la deteccion y el seguimiento de las manos------------
+clase_manos  =  mp.solutions.hands
+manos = clase_manos.Hands() #Primer parametro, FALSE para que no haga la deteccion 24/7
+                            #Solo hara deteccion cuando hay una confianza alta
+                            #Segundo parametro: numero maximo de manos
+                            #Tercer parametro: confianza minima de deteccion
+                            #Cuarto parametro: confianza minima de seguimiento
+
+#----------------------------------Metodo para dibujar las manos---------------------------
+dibujo = mp.solutions.drawing_utils #Con este metodo dibujamos 21 puntos criticos de la mano
+
+
+while (1):
+    ret,frame = cap.read()
+    color = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    copia = frame.copy()
+    resultado = manos.process(color)
+    posiciones = []  # En esta lista vamos a almacenar las coordenadas de los puntos
+    #print(resultado.multi_hand_landmarks) #Si queremos ver si existe la deteccion
+
+    if resultado.multi_hand_landmarks: #Si hay algo en los resultados entramos al if
+        for mano in resultado.multi_hand_landmarks:  #Buscamos la mano dentro de la lista de manos que nos da el descriptor
+            for id, lm in enumerate(mano.landmark):  #Vamos a obtener la informacion de cada mano encontrada por el ID
+                #print(id,lm) #Como nos entregan decimales (Proporcion de la imagen) debemos pasarlo a pixeles
+                alto, ancho, c = frame.shape  #Extraemos el ancho y el alto de los fotpgramas para multiplicarlos por la proporcion
+                corx, cory = int(lm.x*ancho), int(lm.y*alto) #Extraemos la ubicacion de cada punto que pertence a la mano en coordenadas
+                posiciones.append([id,corx,cory])
+                dibujo.draw_landmarks(frame, mano, clase_manos.HAND_CONNECTIONS)
+            if len(posiciones) != 0:
+                pto_i1 = posiciones[4] #5 Dedos: 4 | 0 Dedos: 3 | 1 Dedo: 2 | 2 Dedos: 3 | 3 Dedos: 4 | 4 Dedos: 8
+                pto_i2 = posiciones[20]#5 Dedos: 20| 0 Dedos: 17| 1 Dedo: 17| 2 Dedos: 20| 3 Dedos: 20| 4 Dedos: 20
+                pto_i3 = posiciones[12]#5 Dedos: 12| 0 Dedos: 10 | 1 Dedo: 20|2 Dedos: 16| 3 Dedos: 12| 4 Dedos: 12
+                pto_i4 = posiciones[0] #5 Dedos: 0 | 0 Dedos: 0 | 1 Dedo: 0 | 2 Dedos: 0 | 3 Dedos: 0 | 4 Dedos: 0
+                pto_i5 = posiciones[9] #Punto central
+                x1,y1 = (pto_i5[1]-80),(pto_i5[2]-80) #Obtenemos el punto incial y las longitudes
+                ancho, alto = (x1+80),(y1+80)
+                x2,y2 = x1 + ancho, y1 + alto
+                dedos_reg = copia[y1:y2, x1:x2]
+                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)
+            dedos_reg = cv2.resize(dedos_reg,(200,200), interpolation = cv2.INTER_CUBIC) #Redimensionamos las fotos
+            cv2.imwrite(directory + "/Mano_{}.jpg".format(cont),dedos_reg)
+            cont = cont + 1
+
+
+
+
+
+    cv2.imshow("Video",frame)
+    k = cv2.waitKey(1)
+    if k == 27 or cont >= 300:
+        break
 cap.release()
 cv2.destroyAllWindows()

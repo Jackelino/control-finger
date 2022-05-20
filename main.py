@@ -1,6 +1,7 @@
 import pygame as pg
 from setup.Setup import Setup
 from player.Player import Player
+from control.Control import Control
 
 running = True
 player = Player('Jack')
@@ -14,12 +15,13 @@ font = pg.font.Font(setup.font['Fixedsys500'], setup.sizeFont)
 textScore = font.render("score: " + str(player.score), True, setup.colors['WHITE'])
 textPlayer = font.render("player: " + player.name, True, setup.colors['WHITE'])
 clock = pg.time.Clock()
-
+textTime = font.render("Time: " + str(clock.tick()), True, setup.colors['WHITE'])
 
 def draw_windows():
     screen.fill(setup.colors['BLACK'])
     screen.blit(textScore, (10, 10))
     screen.blit(textPlayer, (600, 10))
+    screen.blit(textTime, (150, 10))
     pg.display.flip()
 
 

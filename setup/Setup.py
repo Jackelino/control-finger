@@ -1,4 +1,3 @@
-
 class Setup:
     def __init__(self, tittle="Control finger", screenWidth=800, screenHeight=600):
         # TITLE
@@ -35,6 +34,17 @@ class Setup:
         }
         # FPS
         self._fps = 60
+
+        # MODELS
+        self._models = {
+            'model1': './recognition/models/model1.h5'
+        }
+
+        # weights
+        self._weights = {
+            'weight1': './recognition/weights/weight1.h5'
+        }
+
     # GETTERS
 
     @property

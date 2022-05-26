@@ -2,7 +2,7 @@ import cv2
 import mediapipe as mp
 import os
 
-nameDirectory = 'signal_left'
+nameDirectory = 'signal_right'
 path = '../resources/entrenamiento'
 directory = path + '/' + nameDirectory
 
@@ -54,8 +54,8 @@ while (1):
                 pto_i3 = posiciones[12]#5 Dedos: 12| 0 Dedos: 10 | 1 Dedo: 20|2 Dedos: 16| 3 Dedos: 12| 4 Dedos: 12
                 pto_i4 = posiciones[0] #5 Dedos: 0 | 0 Dedos: 0 | 1 Dedo: 0 | 2 Dedos: 0 | 3 Dedos: 0 | 4 Dedos: 0
                 pto_i5 = posiciones[9] #Punto central
-                x1,y1 = (pto_i5[1]-80),(pto_i5[2]-80) #Obtenemos el punto incial y las longitudes
-                ancho, alto = (x1+80),(y1+80)
+                x1,y1 = (pto_i5[1]-100),(pto_i5[2]-100) #Obtenemos el punto incial y las longitudes
+                ancho, alto = (x1+100),(y1+100)
                 x2,y2 = x1 + ancho, y1 + alto
                 dedos_reg = copia[y1:y2, x1:x2]
                 cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 3)

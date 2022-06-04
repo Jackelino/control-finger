@@ -1,10 +1,9 @@
 # Visión artificial
 # Profesora Vianney
-# Semestre 2022A 06 de Junio del 2022
+# Period 2022A June 6, 2022
 # Ricardo Gonzalez Garduño
 # Irvin Carapia Hernández
-# José
-# Importación de las librerías
+# José Manuel Fernández Gómez
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -14,15 +13,12 @@ import constants
 import levels
 from player import Player
 
-# Importación de las herramientas de media pipe
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 mp_drawing_styles = mp.solutions.drawing_styles
 
-# Solicitar acceso a la camara de video
 cap = cv2.VideoCapture(0)
 
-# Definir las dimensiones y propiedades de la cámara
 wCam, hCam = 800, 600
 cap.set(3,wCam)
 cap.set(4,hCam)
@@ -31,24 +27,23 @@ up = False
 down = False
 count = 0
 
-# Iniciamos pygame
 pygame.init()
 
-# Valores de la pantalla en el videojuego
+# Set the height and width of the screen
 size = [constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT]
 screen = pygame.display.set_mode(size)
 
 pygame.display.set_caption("Juego de plataforma con visión artificial")
 
-# Se crea al jugador
+# Create the player
 player = Player()
 
-# Se crean los dos niveles
+# Create all the levels
 level_list = []
 level_list.append(levels.Level_01(player))
 level_list.append(levels.Level_02(player))
 
-# Se indica que se comienza en el nivel uno
+# Set the current level
 current_level_no = 0
 current_level = level_list[current_level_no]
 
@@ -59,17 +54,17 @@ player.rect.x = 340
 player.rect.y = constants.SCREEN_HEIGHT - player.rect.height
 active_sprite_list.add(player)
 
-# Se inicia el loop hasta salir de la camara con ESC
+#Loop until the user clicks the close button.
 done = False
 
-# Con esto se actualizara el videojuego
+# Used to manage how fast the screen updates
 clock = pygame.time.Clock()
 
-# Inicia el loop del videojuego y reconocimiento de imagen
+player.stop()
+current_level.update()
 with mp_hands.Hands(
-    # Se indica que se trabajará con una imagen en movimiento y solo una mano
     static_image_mode=False,
-    max_num_hands=1,
+    max_num_hands=2,
     min_detection_confidence=0.75) as hands:
 
     while True:

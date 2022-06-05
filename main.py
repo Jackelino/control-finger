@@ -2,41 +2,38 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from math import *
-import pygame
-from setup.Setup import Setup
 from level.Level import *
 from player.Player import Player
 
+############################## declaration of global variables
+# draw
 mp_drawing = mp.solutions.drawing_utils
+# hand
 mp_hands = mp.solutions.hands
+# style draw of de hand
 mp_drawing_styles = mp.solutions.drawing_styles
-
+# video capture with opencv
 cap = cv2.VideoCapture(0)
-
-wCam, hCam = 200, 100
-cap.set(3, wCam)
-cap.set(4, hCam)
-
-up = False
-down = False
-count = 0
-
+# setup class instance for project constants
 setup = Setup()
 
 ############## setup pygame ##########
 pygame.init()
-# Set the height and width of the screen
+# Set the height and width of the screen videogamne
 size = [setup.screenWidth, setup.screenHeight]
 screen = pygame.display.set_mode(size)
 # tittle screen
 pygame.display.set_caption(setup.tittle)
-# font pygame
+# font videogame
 font = pygame.font.Font(setup.font['Fixedsys500'], setup.sizeFont)
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
+# time
+time = 0
 
 ################# Create the player
-player = Player()
+# pass parameter the name player
+player = Player("Jack")
 
 ################# Create all the levels
 level_list = []
@@ -50,38 +47,44 @@ current_level = level_list[current_level_no]
 active_sprite_list = pygame.sprite.Group()
 player.level = current_level
 
+# initial location of the character on the screen
 player.rect.x = 340
 player.rect.y = setup.screenHeight - player.rect.height
 active_sprite_list.add(player)
 
-# Loop until the user clicks the close button.
-done = False
-
 
 def draw_windows():
-    textScore = font.render("score: " + str(player.score), True, setup.colors['WHITE'])
+    # textScore = font.render("score: " + str(player.score), True, setup.colors['WHITE'])
     textPlayer = font.render("player: " + player.name, True, setup.colors['WHITE'])
-    screen.blit(textScore, (10, 10))
+    textTime = font.render("Tiempo:" + str(time), True, setup.colors['WHITE'])
+    screen.blit(textTime, (10, 10))
     screen.blit(textPlayer, (600, 10))
 
 
 with mp_hands.Hands(
         static_image_mode=False,
-        max_num_hands=2,
+        max_num_hands=1,
         min_detection_confidence=0.75) as hands:
     while True:
+        # the time is chosen and to divide in 1 second
+        time = pygame.time.get_ticks() / 1000
+        time = int(time)
+        # real-time camera reading
         ret, frame = cap.read()
         if ret == False:
             break
+        # width and height of the video capture box
         height, width, _ = frame.shape
         frame = cv2.flip(frame, 1)
+        # convert the frame to rgb
         frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # we pass the rbg frame to the media pipe functions
         results = hands.process(frame_rgb)
         if results.multi_hand_landmarks is not None:
-            # Accediendo a los puntos de referencia, de acuerdo a su nombre
+            # Accessing landmarks, according to their name
             for hand_landmarks in results.multi_hand_landmarks:
 
-                # COORDENADAS MEÑIQUE
+                # little finger coordinates
                 x1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].x * width)
                 y1 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_TIP].y * height)
                 x2 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_PIP].x * width)
@@ -89,7 +92,7 @@ with mp_hands.Hands(
                 x3 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].x * width)
                 y3 = int(hand_landmarks.landmark[mp_hands.HandLandmark.PINKY_MCP].y * height)
 
-                # COORDENADAS ANULAR
+                # ring finger coordinates
                 x4 = int(hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP].x * width)
                 y4 = int(hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_TIP].y * height)
                 x5 = int(hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_PIP].x * width)
@@ -97,7 +100,7 @@ with mp_hands.Hands(
                 x6 = int(hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP].x * width)
                 y6 = int(hand_landmarks.landmark[mp_hands.HandLandmark.RING_FINGER_MCP].y * height)
 
-                # COORDENADAS MEDIO
+                # meddle finger coordinates
                 x7 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].x * width)
                 y7 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y * height)
                 x8 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_PIP].x * width)
@@ -105,7 +108,7 @@ with mp_hands.Hands(
                 x9 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].x * width)
                 y9 = int(hand_landmarks.landmark[mp_hands.HandLandmark.MIDDLE_FINGER_MCP].y * height)
 
-                # COORDENADAS INDICE
+                # index finger coordinates
                 x10 = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * width)
                 y10 = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * height)
                 x11 = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_PIP].x * width)
@@ -113,7 +116,7 @@ with mp_hands.Hands(
                 x12 = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].x * width)
                 y12 = int(hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_MCP].y * height)
 
-                # COORDENADAS PULGAR PARTE EXTERNA
+                # internal thumb coordinates
                 x13 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x * width)
                 y13 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y * height)
                 x14 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_IP].x * width)
@@ -121,7 +124,7 @@ with mp_hands.Hands(
                 x15 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP].x * width)
                 y15 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP].y * height)
 
-                # COORDENADAS PULGAR PARTE INTERNA
+                # external thumb coordinates
                 x16 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x * width)
                 y16 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y * height)
                 x17 = int(hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_MCP].x * width)
@@ -129,6 +132,7 @@ with mp_hands.Hands(
                 x18 = int(hand_landmarks.landmark[mp_hands.HandLandmark.WRIST].x * width)
                 y18 = int(hand_landmarks.landmark[mp_hands.HandLandmark.WRIST].y * height)
 
+                ###### points from coordinates #####
                 p1 = np.array([x1, y1])
                 p2 = np.array([x2, y2])
                 p3 = np.array([x3, y3])
@@ -153,6 +157,7 @@ with mp_hands.Hands(
                 p17 = np.array([x17, y17])
                 p18 = np.array([x18, y18])
 
+                # linear distance of the 3 points of each finger
                 l1 = np.linalg.norm(p2 - p3)
                 l2 = np.linalg.norm(p1 - p3)
                 l3 = np.linalg.norm(p1 - p2)
@@ -191,7 +196,7 @@ with mp_hands.Hands(
 
                 num_den6 = (l16 ** 2 + l18 ** 2 - l17 ** 2) / (2 * l16 * l18)
 
-                # Calcular el ángulo
+                # Calculate the angle
 
                 if l1 and l3 != 0 and -1 < num_den1 < 1:
                     angle1 = round(degrees(abs(acos(num_den1))))
@@ -222,49 +227,57 @@ with mp_hands.Hands(
                     angle6 = round(degrees(abs(acos(num_den6))))
                 else:
                     angle6 = 0
-
+                # array of degrees of the angles
                 angulosid = [angle1, angle2, angle3, angle4, angle5, angle6]
-                dedos = []
+                # array where it will be stored if there is a degree of each finger
+                fingers = []
 
-                # pulgar externo angle
+                ###### thumb ###
+                # check if the thumb has an external angle
                 if angle6 > 125:
-                    dedos.append(1)
+                    fingers.append(1)
                 else:
-                    dedos.append(0)
+                    fingers.append(0)
 
-                # pulgar interno
+                # check if the thumb has an internal angle
                 if angle5 > 150:
-                    dedos.append(1)
+                    fingers.append(1)
                 else:
-                    dedos.append(0)
+                    fingers.append(0)
 
-                # 4 dedos
+                # the remaining 4 fingers
                 for id in range(0, 4):
                     if angulosid[id] > 90:
-                        dedos.append(1)
+                        fingers.append(1)
                     else:
-                        dedos.append(0)
+                        fingers.append(0)
 
-                TotalDedos = dedos.count(1)
+                allFigers = fingers.count(1)
 
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                if dedos == [1, 1, 0, 0, 0, 0]:
+                fontOpencv = cv2.FONT_HERSHEY_SIMPLEX
+                # Compare the contents of the array to find out what sign it is.
+                if fingers == [1, 1, 0, 0, 0, 0]:  # signal A
                     cv2.rectangle(frame, (0, 0), (100, 100), (255, 255, 255), -1)
-                    cv2.putText(frame, 'A', (20, 80), font, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, 'A', (20, 80), fontOpencv, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    # the player moves to the left
                     player.go_left()
-                if dedos == [1, 1, 1, 0, 0, 0]:
+                if fingers == [1, 1, 1, 0, 0, 0]:  # signal Y
                     cv2.rectangle(frame, (0, 0), (100, 100), (255, 255, 255), -1)
-                    cv2.putText(frame, 'Y', (20, 80), font, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, 'Y', (20, 80), fontOpencv, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    # the player moves to the right
                     player.go_right()
-                if dedos == [0, 0, 1, 0, 0, 1]:
+                if fingers == [0, 0, 1, 0, 0, 1]:  # signal U
                     cv2.rectangle(frame, (0, 0), (100, 100), (255, 255, 255), -1)
-                    cv2.putText(frame, 'U', (20, 80), font, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, 'U', (20, 80), fontOpencv, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    # player stop
                     player.stop()
-                if dedos == [1, 1, 0, 0, 0, 1]:
+                #
+                if fingers == [1, 1, 0, 0, 0, 1]:  # signal L
                     cv2.rectangle(frame, (0, 0), (100, 100), (255, 255, 255), -1)
-                    cv2.putText(frame, 'L', (20, 80), font, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    cv2.putText(frame, 'L', (20, 80), fontOpencv, 3, (0, 0, 0), 2, cv2.LINE_AA)
+                    # player jump
                     player.jump()
-
+            # change style default of media pipe
             if results.multi_hand_landmarks:
                 for hand_landmarks in results.multi_hand_landmarks:
                     mp_drawing.draw_landmarks(
@@ -273,23 +286,20 @@ with mp_hands.Hands(
                         mp_hands.HAND_CONNECTIONS,
                         mp_drawing_styles.get_default_hand_landmarks_style(),
                         mp_drawing_styles.get_default_hand_connections_style())
+        # active the sprite of player
         active_sprite_list.update()
-
         # Update items in the level
         current_level.update()
-
         # If the player gets near the right side, shift the world left (-x)
         if player.rect.x >= 500:
             diff = player.rect.x - 500
             player.rect.x = 500
             current_level.shift_world(-diff)
-
         # If the player gets near the left side, shift the world right (+x)
         if player.rect.x <= 120:
             diff = 120 - player.rect.x
             player.rect.x = 120
             current_level.shift_world(diff)
-
         # If the player gets to the end of the level, go to the next level
         current_position = player.rect.x + current_level.world_shift
         if current_position < current_level.level_limit:
@@ -298,29 +308,21 @@ with mp_hands.Hands(
                 current_level_no += 1
                 current_level = level_list[current_level_no]
                 player.level = current_level
-
         # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
         current_level.draw(screen)
         active_sprite_list.draw(screen)
-
         # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
-
         # Limit to 60 frames per second
         clock.tick(60)
-        #draw_windows()
-
+        # we draw the information of the type and the player
+        draw_windows()
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
-
         cv2.imshow('Frame', frame)
-
         if cv2.waitKey(1) & 0xFF == 27:
             break
-
         # Be IDLE friendly. If you forget this line, the program will 'hang'
         # on exit.
-
     pygame.quit()
-
 cap.release()
 cv2.destroyAllWindows()

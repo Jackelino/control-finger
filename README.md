@@ -11,7 +11,7 @@ Las señas utlizadas son del lengueje de señas mexicano:
 - 'A' izquierda
 - 'Y' derecha
 - 'L' saltar
-- 'U' detener
+- 'V' detener
 
 
 ## Instalación
